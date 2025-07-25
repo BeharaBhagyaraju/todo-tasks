@@ -1,4 +1,6 @@
 import Task from "../models/tasks.model.js";
+import { uploadBufferToCloudinary } from "../utils/uploadBuffer.js";
+import path from "path";
 
 
 export const createTask = async (req  , res) => {
@@ -241,19 +243,38 @@ export const addFileNoteToTask = async (req , res) => {
                 success:false,
             });
         }
-        const fileNote = {
-            noteType:"file",
-            content: {
-                originalName:req.file.originalname,
-                mimeType:req.file.mimetype,
-                buffer:req.file.buffer,
-            },
+
+        const originalName = path.parse(req.file.originalname).name;
+        const mimeType = req.file.mimetype;
+        const isImage = mimeType.startsWith("image/");
+        const noteType = isImage ? "image" : "file";
+
+        const cloudinaryUrl = await uploadBufferToCloudinary(req.file.buffer , originalName , mimeType);
+
+        const fileNote ={
+            noteType,
+            content: cloudinaryUrl,
         };
+
         task.notes.push(fileNote);
         await task.save();
+
+
+
+        // const fileNote = {
+        //     noteType:"file",
+        //     content: {
+        //         originalName:req.file.originalname,
+        //         mimeType:req.file.mimetype,
+        //         buffer:req.file.buffer,
+        //     },
+        // };
+        // task.notes.push(fileNote);
+        // await task.save();
         res.status(201).json({
             message:"File note added to task successfully",
             success:true,
+            noteUrl:cloudinaryUrl,
             task,
         });
     }catch(error){

@@ -25,7 +25,7 @@ const taskSchema = new mongoose.Schema({
     
     notes:[
         {
-            type : { 
+            noteType : { 
                 type : String , 
                 enum : ["text" , "image" , "file"],
                 required:true,

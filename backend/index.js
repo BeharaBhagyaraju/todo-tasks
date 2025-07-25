@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./utils/db.js";
 import userRoutes from "./routes/user.route.js";
+import taskRoutes from "./routes/tasks.route.js";
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ const PORT = process.env.PORT || 3000;
 //api's
 
 app.use("/api/v1/user",userRoutes);
+app.use("/api/v1/tasks",taskRoutes);
 
 app.listen(PORT,async () => {
     try{

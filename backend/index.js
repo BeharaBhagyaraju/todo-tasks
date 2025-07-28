@@ -5,6 +5,7 @@ import cors from "cors";
 import connectDB from "./utils/db.js";
 import userRoutes from "./routes/user.route.js";
 import taskRoutes from "./routes/tasks.route.js";
+import progressRoutes from "./routes/progress.route.js";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use("/api/v1/user",userRoutes);
 app.use("/api/v1/tasks",taskRoutes);
+app.use("/api/v1/progress",progressRoutes); 
 
 app.listen(PORT,async () => {
     try{
